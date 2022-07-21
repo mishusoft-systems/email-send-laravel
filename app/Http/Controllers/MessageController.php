@@ -9,7 +9,8 @@ use Illuminate\Support\Carbon;
 
 class MessageController extends Controller
 {
-    public function getUsers(){
+    public function getUsers(): \Illuminate\Database\Eloquent\Collection
+    {
 
         return User::all();
     }
