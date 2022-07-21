@@ -13,9 +13,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', static function (Blueprint $table) {
+        Schema::create('messages', static function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('title');
+            $table->text('body');
+            $table->enum('delivered', ['YES', 'NO'])->default('NO');
+            $table->string('date_string')->nullable();
+            $table->timestamp('send_date');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('messages');
     }
 };

@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', static function () {
     return view('welcome');
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/get_users', 'MessageController@getUsers');
+Route::get('/get_messages', 'MessageController@getMessages');
+Route::post('notifications', 'MessageController@sendMail');

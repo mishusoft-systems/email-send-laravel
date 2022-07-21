@@ -11,9 +11,9 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('sent_emails', function (Blueprint $table) {
+        Schema::create('sent_emails', static function (Blueprint $table) {
             $table->id();
             $table->integer('user');
             $table->string('first_sent_date');
@@ -29,7 +29,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('sent_emails');
     }
