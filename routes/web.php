@@ -15,7 +15,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', static function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -24,8 +24,26 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+Route::middleware(array('auth', 'verified'))->group(function (){
+    Route::get('/dashboard', static function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('/users', static function () {
+        return Inertia::render('Users');
+    })->name('users');
+
+    Route::get('/events', static function () {
+        return Inertia::render('Dashboard');
+    })->name('events');
+
+    Route::get('/messages', static function () {
+        return Inertia::render('Dashboard');
+    })->name('messages');
+});
+
+/*Route::get('/dashboard', static function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');*/
 
 require __DIR__.'/auth.php';
