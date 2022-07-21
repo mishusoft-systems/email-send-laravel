@@ -29,5 +29,13 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => Str::random(10),
             ));
         }
+
+        User::create(array(
+            'name' => 'admin',
+            'email' => 'admin@mail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('admin'),
+            'remember_token' => Str::random(10),
+        ));
     }
 }

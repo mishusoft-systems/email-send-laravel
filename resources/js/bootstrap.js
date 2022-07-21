@@ -1,5 +1,5 @@
 import lodash from "lodash";
-import bootstrap from "bootstrap";
+//import {bootstrap} from "bootstrap";
 import axios0 from "axios";
 
 window._ = lodash;
