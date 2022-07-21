@@ -1,0 +1,46 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    # https://www.seomix.fr/guide-htaccess-performances-et-temps-de-chargement/
+    # BEGIN Cache-Control Headers
+    <IfModule mod_headers.c>
+         <FilesMatch "\.(ico|jpe?g|png|gif|swf|css|gz|svg)$">
+            Header set Cache-Control "max-age=2592000, public"
+         </FilesMatch>
+         <FilesMatch "\.(js)$">
+            Header set Cache-Control "max-age=2592000, private"
+         </FilesMatch>
+        <filesMatch "\.(html|htm)$">
+            Header set Cache-Control "max-age=7200, public"
+        </filesMatch>
+        # Disable caching for scripts and other dynamic files
+        <FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+            Header unset Cache-Control
+        </FilesMatch>
+    </IfModule>
+    # END Cache-Control Headers
+
+    # protect the htaccess file
+    <files .htaccess>
+        order allow,deny
+        deny from all
+    </files>
+
+    RewriteEngine On
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
