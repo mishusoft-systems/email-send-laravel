@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
+    loader: { '.js': 'jsx' },
     plugins: [
         laravel({
             input: [
