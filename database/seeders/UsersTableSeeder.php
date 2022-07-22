@@ -20,7 +20,7 @@ class UsersTableSeeder extends Seeder
 
         User::truncate();
 
-        foreach (range(1, 5) as $i) {
+        foreach (range(1, 50) as $i) {
             User::create(array(
                 'name' => $faker->name,
                 'email' => $faker->unique()->email,
@@ -32,9 +32,18 @@ class UsersTableSeeder extends Seeder
 
         User::create(array(
             'name' => 'admin',
-            'email' => 'admin@mail.com',
+            'email' => 'mrabir.ahamed@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('admin'),
+            'is_subscribe'=> true,
+            'remember_token' => Str::random(10),
+        ));
+        User::create(array(
+            'name' => 'user',
+            'email' => 'sopnomon96@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('admin'),
+            'is_subscribe'=> true,
             'remember_token' => Str::random(10),
         ));
     }

@@ -8,9 +8,9 @@
     Dear {{$user->name}}
 
 
-    <h2>{{ $new_arrival->title }}</h2>
+    <h2>{{ $new_message->title }}</h2>
 
-    <p>{{ $new_arrival->body }}</p>
+    <p>{{ $new_message->body }}</p>
 
     click on the link below to see more
 

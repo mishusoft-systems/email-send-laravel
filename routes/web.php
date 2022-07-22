@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,17 +32,9 @@ Route::middleware(array('auth', 'verified'))->group(function (){
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/users', static function () {
-        return Inertia::render('Users');
-    })->name('users');
-
-    Route::get('/events', static function () {
-        return Inertia::render('Dashboard');
-    })->name('events');
-
-    Route::get('/messages', static function () {
-        return Inertia::render('Dashboard');
-    })->name('messages');
+    Route::get('/users', array(UserController::class, 'index'))->name('users');
+    Route::get('/events', array(EventController::class, 'index'))->name('events');
+    Route::get('/messages', array(MessageController::class, 'index'))->name('messages');
 });
 
 /*Route::get('/dashboard', static function () {

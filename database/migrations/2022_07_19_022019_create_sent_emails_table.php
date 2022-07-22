@@ -16,10 +16,8 @@ return new class extends Migration
         Schema::create('sent_emails', static function (Blueprint $table) {
             $table->id();
             $table->integer('user');
-            $table->string('first_sent_date');
-            $table->string('last_sent_date');
-            $table->string('is_unsubscribe');
-            $table->string('is_not_respond');
+            $table->integer('message');
+            $table->string('is_not_responded');
             $table->timestamps();
         });
     }
