@@ -38,6 +38,12 @@ class NotifySubscribedCustomer extends Command
         return $later->diff($earlier)->format("%a"); //3
     }
 
+    private function getTimeFramesList(string $time_frame):array
+    {
+        $time_frame = str_replace(' ', '', $time_frame);
+        return array_unique(explode(',', $time_frame));
+    }
+
     /**
      * Execute the console command.
      *
@@ -57,12 +63,12 @@ class NotifySubscribedCustomer extends Command
                 // verify mail
                 $sentMail =  SentEmail::where(array('user' => $user->id, 'message' => $message->id))->get()->first();
                 $sendingDuration = $this->dateDiffInDays($sentMail->created_at, $now);
-                if (!$sentMail->is_response_found && in_array($sendingDuration, array(3, 7, 14, 18), true)){
+                $definedAllTimeFrames =  $this->getTimeFramesList($message->time_frame);
+                if (!$sentMail->is_response_found && in_array($sendingDuration, $definedAllTimeFrames, true)){
                     dispatch(new SendMailJob($user->email, new NewMessage($user, $message)));
                 }
             });
         });
-
 
         return 0;
     }

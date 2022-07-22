@@ -26,7 +26,8 @@ export default function Dashboard(props) {
         title: '',
         body: '',
         item: 'now',
-        time_frame: false,
+        is_time_frame_enable: false,
+        time_frame: '',
     });
 
     const classNames = (...classes) => {
@@ -323,11 +324,19 @@ export default function Dashboard(props) {
                                                 </div>
 
                                                 <div className="flex flex-row mt-4 align-middle">
-                                                    <Label forInput="time_frame" className="flex flex-row ml-2">
-                                                        <Input id="time_frame" type="checkbox" name="time_frame" value='1' className="mt-0.5 mr-2 block" isFocused={true} handleChange={onHandleChange}/>
-                                                        Enable resending if no response found
+                                                    <Label forInput="is_time_frame_enable" className="flex flex-row ml-2">
+                                                        <Input id="is_time_frame_enable" type="checkbox" name="is_time_frame_enable" value='1' className="mt-0.5 mr-2 block" isFocused={true} handleChange={onHandleChange}/>
+                                                        Enable resending time frame if no response found
                                                     </Label>
                                                 </div>
+
+
+                                                {data.is_time_frame_enable ? (
+                                                        <div className="mt-4">
+                                                            <Label forInput="time_frame" value="Time Frame" />
+                                                            <Input id="time_frame" type="text" name="time_frame" value={data.time_frame} className="mt-0.5 mr-2 w-full" isFocused={true} handleChange={onHandleChange}/>
+                                                        </div>
+                                                ) : ''}
 
                                             </form>
 

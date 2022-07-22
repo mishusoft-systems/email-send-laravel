@@ -21,7 +21,7 @@ class MessagesTableSeeder extends Seeder
                'title'=>'First Meeting',
                'body'=>'We are arranged first meeting for every new comers',
                'delivered'=>'NO',
-               'time_frame'=> true
+               'time_frame'=> '3,7,12'
            )
        );
     }

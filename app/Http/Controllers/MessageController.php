@@ -29,12 +29,6 @@ class MessageController extends Controller
         ));
     }
 
-    public function getMessages()
-    {
-
-        return Message::orderBy('created_at', 'desc')->get();
-    }
-
     /**
      * Save message to database and sent to subscribed customer
      *
@@ -49,7 +43,7 @@ class MessageController extends Controller
                 'title'      => $request->get('title'),
                 'body'       => $request->get('body'),
                 'delivered'  => 'YES',
-                'time_frame' => (bool) $request->get('time_frame'),
+                'time_frame' => $request->get('time_frame'),
                 'send_date'  => Carbon::now(),
             )
         );
