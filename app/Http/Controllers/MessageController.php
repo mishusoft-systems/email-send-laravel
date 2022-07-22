@@ -43,12 +43,13 @@ class MessageController extends Controller
      */
     public function sendMail(Request $request): JsonResponse
     {
+
         $message = Message::create(
             array(
                 'title'      => $request->get('title'),
                 'body'       => $request->get('body'),
                 'delivered'  => 'YES',
-                'time_frame' => $request->get('time_frame'),
+                'time_frame' => (bool) $request->get('time_frame'),
                 'send_date'  => Carbon::now(),
             )
         );

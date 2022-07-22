@@ -7,8 +7,6 @@ import Guest from "@/Layouts/Guest";
 
 export default (props) => {
 
-    console.log(props)
-
     return (
         <Guest>
             <Head title="Response"/>

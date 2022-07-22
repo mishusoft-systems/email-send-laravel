@@ -40,8 +40,6 @@ export default function Dashboard(props) {
     const submit = (e) => {
         e.preventDefault();
 
-        console.log('form submitted')
-
         post(route('message.create'));
         setOpen(false)
     };
@@ -52,10 +50,6 @@ export default function Dashboard(props) {
             reset('item');
         };
     }, []);
-
-
-
-    console.log(props)
 
     return (
         <Authenticated
@@ -329,8 +323,10 @@ export default function Dashboard(props) {
                                                 </div>
 
                                                 <div className="flex flex-row mt-4 align-middle">
-                                                    <Input id="time_frame" type="checkbox" name="time_frame" value='enable' className="mt-1 block" isFocused={true} handleChange={onHandleChange}/>
-                                                    <Label forInput="time_frame" value="Enable resending if no response found" className="ml-2" />
+                                                    <Label forInput="time_frame" className="flex flex-row ml-2">
+                                                        <Input id="time_frame" type="checkbox" name="time_frame" value='1' className="mt-0.5 mr-2 block" isFocused={true} handleChange={onHandleChange}/>
+                                                        Enable resending if no response found
+                                                    </Label>
                                                 </div>
 
                                             </form>
