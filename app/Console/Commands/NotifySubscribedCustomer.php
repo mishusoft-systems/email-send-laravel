@@ -5,7 +5,9 @@ namespace App\Console\Commands;
 use App\Jobs\SendMailJob;
 use App\Mail\NewMessage;
 use App\Models\Message;
+use App\Models\SentEmail;
 use App\Models\User;
+use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 
@@ -26,9 +28,21 @@ class NotifySubscribedCustomer extends Command
     protected $description = 'Send an email to subscribed customer';
 
     /**
+     * @throws \Exception
+     */
+    private function dateDiffInDays(string $date1, string $date2): float|int
+    {
+        $earlier = new DateTime($date1);
+        $later = new DateTime($date2);
+
+        return $later->diff($earlier)->format("%a"); //3
+    }
+
+    /**
      * Execute the console command.
      *
      * @return int
+     * @throws \Exception
      */
     public function handle(): int
     {
@@ -36,19 +50,19 @@ class NotifySubscribedCustomer extends Command
         $now = date("Y-m-d H:i", strtotime(Carbon::now()->addHour()));
         logger($now);
 
-        $messages = Message::get();
-        $messages?->where('date_string', $now)->each(function ($message) {
-            if ($message->delivered === 'NO') {
-                $users = User::all();
-                foreach ($users as $user) {
-                    if ($user->is_subscribe){
-                        dispatch(new SendMailJob($user->email, new NewMessage($user, $message)));
-                    }
+        // collect scheduled message
+        Message::whereNotNull('time_frame')->get()->map(function($message) use ($now) {
+            // collect user who are subscribed
+            User::where('is_subscribe', true)->get()->map(function($user) use ($now, $message) {
+                // verify mail
+                $sentMail =  SentEmail::where(array('user' => $user->id, 'message' => $message->id))->get()->first();
+                $sendingDuration = $this->dateDiffInDays($sentMail->created_at, $now);
+                if (!$sentMail->is_response_found && in_array($sendingDuration, array(3, 7, 14, 18), true)){
+                    dispatch(new SendMailJob($user->email, new NewMessage($user, $message)));
                 }
-                $message->delivered = 'YES';
-                $message->save();
-            }
+            });
         });
+
 
         return 0;
     }

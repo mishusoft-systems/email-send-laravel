@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('body');
             $table->enum('delivered', ['YES', 'NO'])->default('NO');
-            $table->string('date_string')->nullable();
-            $table->timestamp('send_date');
+            $table->boolean('time_frame')->default(false);
+            $table->timestamp('send_date')->nullable();
             $table->timestamps();
         });
     }

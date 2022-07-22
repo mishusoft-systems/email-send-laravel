@@ -3,7 +3,13 @@
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserResponseController;
+use App\Models\Message;
+use App\Models\SentEmail;
+use App\Models\User;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -27,18 +33,18 @@ Route::get('/', static function () {
     ]);
 });
 
+// unsubscribe
+Route::get('unsubscribe/{user_hash}', array(UserController::class, 'unsubscribe'))->name('user.unsubscribe');
+
 Route::middleware(array('auth', 'verified'))->group(function (){
-    Route::get('/dashboard', static function () {
+    Route::get('dashboard', static function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::get('/users', array(UserController::class, 'index'))->name('users');
-    Route::get('/events', array(EventController::class, 'index'))->name('events');
-    Route::get('/messages', array(MessageController::class, 'index'))->name('messages');
+    Route::get('user', array(UserController::class, 'index'))->name('user.index');
+    Route::get('message', array(MessageController::class, 'index'))->name('message.index');
+    Route::post('message', [MessageController::class, 'sendMail'])->name('message.create');
+    Route::get('response/{user}/{type}/{id}', [UserResponseController::class, 'index'])->name('user.response');
 });
-
-/*Route::get('/dashboard', static function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');*/
 
 require __DIR__.'/auth.php';

@@ -6,34 +6,27 @@ use App\Jobs\SendMailJob;
 use App\Mail\NewMessage;
 use App\Models\Message;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class MessageController extends Controller
 {
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
-        return Inertia::render('Messages', array(
-            'messages' => Message::orderBy('created_at', 'desc')->get()->map(function ($message) {
-                return array(
-                    'id' => $message->id,
-                    'title' => $message->title,
-                    'body' => $message->body,
-                    'delivered' => $message->delivered,
-                    'send_date' => $message->send_date,
-                    // 'edit_url' => URL::route('event.edit', $event),
-                );
-            }),
-            // 'create_url' => URL::route('event.create'),
-            // 'update_url' => URL::route('event.create'),
+        return Inertia::render('Message/Index', array(
+            'messages' => Message::orderBy('created_at', 'desc')->get()->map(
+                fn($message): array => array(
+                    'id'         => $message->id,
+                    'title'      => $message->title,
+                    'body'       => $message->body,
+                    'time_frame' => $message->time_frame,
+                    'delivered'  => $message->delivered,
+                    'send_date'  => $message->send_date,
+                )),
         ));
-    }
-
-    public function getUsers(): \Illuminate\Database\Eloquent\Collection
-    {
-
-        return User::all();
     }
 
     public function getMessages()
@@ -42,34 +35,28 @@ class MessageController extends Controller
         return Message::orderBy('created_at', 'desc')->get();
     }
 
-    public function sendMail(Request $request): \Illuminate\Http\JsonResponse
+    /**
+     * Save message to database and sent to subscribed customer
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function sendMail(Request $request): JsonResponse
     {
+        $message = Message::create(
+            array(
+                'title'      => $request->get('title'),
+                'body'       => $request->get('body'),
+                'delivered'  => 'YES',
+                'time_frame' => $request->get('time_frame'),
+                'send_date'  => Carbon::now(),
+            )
+        );
 
-        $message = new Message();
-        $message->title = $request->title;
-        $message->body = $request->body;
-        $message->save();
+        User::where('is_subscribe', true)->get()->map(function ($user) use ($message) {
+            dispatch(new SendMailJob($user->email, new NewMessage($user, $message)));
+        });
 
-        if ($request->item === "now") {
-
-            $message->delivered = 'YES';
-            $message->send_date = Carbon::now();
-            $message->save();
-
-            $users = User::all();
-
-            foreach ($users as $user) {
-                dispatch(new SendMailJob($user->email, new NewMessage($user, $message)));
-            }
-
-            return response()->json('Mail sent.', 201);
-
-        }
-
-        $message->date_string = date("Y-m-d H:i", strtotime($request->send_date));
-
-        $message->save();
-
-        return response()->json('Notification will be sent later.', 201);
+        return response()->json('Mail sent.', 201);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Message;
 use Illuminate\Database\Seeder;
 
 class MessagesTableSeeder extends Seeder
@@ -12,8 +12,17 @@ class MessagesTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        Message::truncate();
+
+       Message::create(
+           array(
+               'title'=>'First Meeting',
+               'body'=>'We are arranged first meeting for every new comers',
+               'delivered'=>'NO',
+               'time_frame'=>'3'
+           )
+       );
     }
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user');
             $table->integer('message');
-            $table->string('is_not_responded');
+            $table->boolean('is_response_found')->default(false);
             $table->timestamps();
         });
     }

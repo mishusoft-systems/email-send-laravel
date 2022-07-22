@@ -27,6 +27,11 @@ class NewMessage extends Mailable
         $this->new_message = $new_message;
     }
 
+    public function getId():int
+    {
+        return $this->new_message->id;
+    }
+
     /**
      * Build the message.
      *
