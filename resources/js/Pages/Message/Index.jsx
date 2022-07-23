@@ -16,7 +16,7 @@ import Button from "@/Components/Button";
 import Textarea from "@/Components/Textarea";
 import ValidationErrors from "@/Components/ValidationErrors";
 
-export default function Dashboard(props) {
+export default (props) => {
 
     const [open, setOpen] = useState(false)
 

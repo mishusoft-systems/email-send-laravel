@@ -1,15 +1,9 @@
 <?php
 
-use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserResponseController;
-use App\Models\Message;
-use App\Models\SentEmail;
-use App\Models\User;
 use Illuminate\Foundation\Application;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,17 +20,17 @@ use Inertia\Inertia;
 
 Route::get('/', static function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
+        'canLogin'       => Route::has('login'),
+        'canRegister'    => Route::has('register'),
         'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'phpVersion'     => PHP_VERSION,
     ]);
 });
 
 // unsubscribe
 Route::get('unsubscribe/{user_hash}', array(UserController::class, 'unsubscribe'))->name('user.unsubscribe');
 
-Route::middleware(array('auth', 'verified'))->group(function (){
+Route::middleware(array('auth', 'verified'))->group(function () {
     Route::get('dashboard', static function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
@@ -47,4 +41,4 @@ Route::middleware(array('auth', 'verified'))->group(function (){
     Route::get('response/{user}/{type}/{id}', [UserResponseController::class, 'index'])->name('user.response');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

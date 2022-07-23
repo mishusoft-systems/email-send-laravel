@@ -5,7 +5,7 @@ import {Head} from '@inertiajs/inertia-react';
 // Internal dependencies
 import Guest from "@/Layouts/Guest";
 
-export default (props) => {
+export default () => {
 
     return (
         <Guest>

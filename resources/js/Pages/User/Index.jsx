@@ -6,7 +6,7 @@ import {Head} from '@inertiajs/inertia-react';
 import Authenticated from '@/Layouts/Authenticated';
 import Checkbox from "@/Components/Checkbox";
 
-export default function Dashboard(props) {
+export default (props) => {
 
     return (
         <Authenticated
